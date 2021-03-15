@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "shipit",
+  "version": "${version}",
+  "name": "Ship It",
+  "description": "Letters and packages for your friends",
+  "authors": [
+    "Emi"
+  ],
+  "contributors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/shipit/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.emi.shipit.ShipItMain"
+    ],
+    "client": [
+      "dev.emi.shipit.ShipItClient"
+    ],
+    "server": [],
+    "cardinal-components-level": [
+      "dev.emi.shipit.registry.ShipItComponents"
+    ]
+  },
+  "mixins": [
+    "shipit.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*"
+  },
+  "custom": {
+    "cardinal-components": [
+      "shipit:mail"
+    ]
+  }
+}

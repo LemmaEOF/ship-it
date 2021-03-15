@@ -1,0 +1,114 @@
+package dev.emi.shipit.component;
+
+import java.util.UUID;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.collection.DefaultedList;
+
+public class PlayerMailInfo implements Inventory {
+	private DefaultedList<ItemStack> stacks = DefaultedList.ofSize(9, ItemStack.EMPTY);
+	public String name;
+	public UUID uuid;
+	//public RegistryKey<World> mailBoxDimension;
+	//public BlockPos mailBoxPos;
+
+	public PlayerMailInfo() {
+	}
+
+	public PlayerMailInfo(PlayerEntity player) {
+		this.uuid = player.getUuid();
+		this.name = player.getName().asString();
+	}
+
+	public void tryNameUpdate(PlayerEntity player) {
+		name = player.getName().asString();
+	}
+
+	public CompoundTag toTag() {
+		CompoundTag tag = new CompoundTag();
+		Inventories.toTag(tag, stacks, false);
+		tag.putString("Name", name);
+		tag.putUuid("Uuid", uuid);
+		/*
+		if (mailBoxDimension != null) {
+			tag.putString("Dimension", mailBoxDimension.getValue().toString());
+		}
+		if (mailBoxPos != null) {
+			tag.putInt("x", mailBoxPos.getX());
+			tag.putInt("y", mailBoxPos.getY());
+			tag.putInt("z", mailBoxPos.getZ());
+		}*/
+		return tag;
+	}
+
+	public void fromTag(CompoundTag tag) {
+		if (tag.contains("Items", 9)) {
+			Inventories.fromTag(tag, stacks);
+		}
+		name = tag.getString("Name");
+		uuid = tag.getUuid("Uuid");
+		/*
+		if (tag.contains("Dimension")) {
+            DataResult<RegistryKey<World>> result = World.CODEC.parse(NbtOps.INSTANCE, tag.get("Dimension"));
+            mailBoxDimension = result.result().orElse(null);
+		}
+		if (mailBoxDimension != null && tag.contains("x")) {
+			mailBoxPos = new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
+		}*/
+	}
+
+	@Override
+	public void clear() {
+		for (int i = 0; i < size(); i++) {
+			setStack(i, ItemStack.EMPTY);
+		}
+	}
+
+	@Override
+	public int size() {
+		return stacks.size();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		for (ItemStack stack : stacks) {
+			if (!stack.isEmpty()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public ItemStack getStack(int slot) {
+		return stacks.get(slot);
+	}
+
+	@Override
+	public ItemStack removeStack(int slot, int amount) {
+		return Inventories.splitStack(this.stacks, slot, amount);
+	}
+
+	@Override
+	public ItemStack removeStack(int slot) {
+		return Inventories.removeStack(stacks, slot);
+	}
+
+	@Override
+	public void setStack(int slot, ItemStack stack) {
+		stacks.set(slot, stack);
+	}
+
+	@Override
+	public boolean canPlayerUse(PlayerEntity player) {
+		return true;
+	}
+
+	@Override
+	public void markDirty() {
+	}
+}
