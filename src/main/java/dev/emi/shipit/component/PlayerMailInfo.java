@@ -1,5 +1,6 @@
 package dev.emi.shipit.component;
 
+import java.util.Random;
 import java.util.UUID;
 
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,9 +11,19 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.collection.DefaultedList;
 
 public class PlayerMailInfo implements Inventory {
+	private static final String[] STREET_NAMES = new String[] {
+		"Bun", "Deer", "Powder", "Gamma", "Pear"
+	};
+	private static final String[] STREET_SUFFIXES = new String[] {
+		"Drive", "Avenue", "Street", "Road", "Lane"
+	};
 	private DefaultedList<ItemStack> stacks = DefaultedList.ofSize(9, ItemStack.EMPTY);
 	public String name;
+	public String address;
 	public UUID uuid;
+	// If the player has ever placed a mailbox
+	public boolean placed;
+
 	//public RegistryKey<World> mailBoxDimension;
 	//public BlockPos mailBoxPos;
 
@@ -22,17 +33,26 @@ public class PlayerMailInfo implements Inventory {
 	public PlayerMailInfo(PlayerEntity player) {
 		this.uuid = player.getUuid();
 		this.name = player.getName().asString();
+		generateRandomAddress();
 	}
 
 	public void tryNameUpdate(PlayerEntity player) {
 		name = player.getName().asString();
 	}
 
+	private void generateRandomAddress() {
+		Random random = new Random();
+		address = random.nextInt(10000) + " " + STREET_NAMES[random.nextInt(STREET_NAMES.length)] + " "
+			+ STREET_SUFFIXES[random.nextInt(STREET_SUFFIXES.length)];
+	}
+
 	public CompoundTag toTag() {
 		CompoundTag tag = new CompoundTag();
 		Inventories.toTag(tag, stacks, false);
 		tag.putString("Name", name);
+		tag.putString("Address", address);
 		tag.putUuid("Uuid", uuid);
+		tag.putBoolean("Placed", placed);
 		/*
 		if (mailBoxDimension != null) {
 			tag.putString("Dimension", mailBoxDimension.getValue().toString());
@@ -50,7 +70,9 @@ public class PlayerMailInfo implements Inventory {
 			Inventories.fromTag(tag, stacks);
 		}
 		name = tag.getString("Name");
+		address = tag.getString("Address");
 		uuid = tag.getUuid("Uuid");
+		placed = tag.getBoolean("Placed");
 		/*
 		if (tag.contains("Dimension")) {
             DataResult<RegistryKey<World>> result = World.CODEC.parse(NbtOps.INSTANCE, tag.get("Dimension"));
@@ -59,6 +81,15 @@ public class PlayerMailInfo implements Inventory {
 		if (mailBoxDimension != null && tag.contains("x")) {
 			mailBoxPos = new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
 		}*/
+	}
+
+	public boolean isFull() {
+		for (ItemStack stack : stacks) {
+			if (stack.isEmpty()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override

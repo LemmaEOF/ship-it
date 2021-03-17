@@ -1,10 +1,14 @@
 package dev.emi.shipit.screen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.emi.shipit.component.PlayerMailInfo;
@@ -28,6 +32,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class PostBoxScreen extends HandledScreen<PostBoxScreenHandler> {
+	private static final Map<UUID, Identifier> SKIN_CACHE = new HashMap<>();
 	private static final Identifier TEXTURE = new Identifier("shipit", "textures/gui/container/post_box.png");
 	private TextFieldWidget searchWidget;
 	private List<PlayerMailInfo> playerSearch = new ArrayList<>();
@@ -44,19 +49,27 @@ public class PostBoxScreen extends HandledScreen<PostBoxScreenHandler> {
 	protected void init() {
 		super.init();
 
+		for (PlayerMailInfo info : ShipItComponents.MAIL.get(this.client.world.getLevelProperties()).getAllMailInfos().values()) {
+			GameProfile profile = new GameProfile(info.uuid, info.name);
+			MinecraftClient.getInstance().getSkinProvider().loadSkin(profile, (type, id, texture) -> {
+				if (type == Type.SKIN) {
+					SKIN_CACHE.put(profile.getId(), id);
+				}
+			}, false);
+		}
+
 		this.client.keyboard.setRepeatEvents(true);
 		int x = (this.width - this.backgroundWidth) / 2;
 		int y = (this.height - this.backgroundHeight) / 2;
 
-		this.searchWidget = new TextFieldWidget(this.textRenderer, x + 60, y + 11, 108, 12, new LiteralText("asdf"));
-		this.searchWidget.setFocusUnlocked(false);
+		this.searchWidget = new TextFieldWidget(this.textRenderer, x + 60, y + 11, 108, 12, new LiteralText(""));
+		this.searchWidget.setFocusUnlocked(true);
 		this.searchWidget.setEditableColor(-1);
 		this.searchWidget.setUneditableColor(-1);
 		this.searchWidget.setDrawsBackground(false);
 		this.searchWidget.setMaxLength(16);
 		this.searchWidget.setChangedListener(this::updateSearch);
 		this.children.add(searchWidget);
-		this.setInitialFocus(searchWidget);
 
 		this.addButton(new ButtonWidget(x + 15, y + 30, 20, 20, new LiteralText("!"), (button) -> {
 			if (selected == null) {
@@ -74,7 +87,13 @@ public class PostBoxScreen extends HandledScreen<PostBoxScreenHandler> {
 	private void updateSearch(String name) {
 		String lower = name.toLowerCase();
 		playerSearch = ShipItComponents.MAIL.get(this.client.world.getLevelProperties()).getAllMailInfos().values().stream()
-			.filter(info -> info.name.toLowerCase().contains(lower)).collect(Collectors.toList());
+			.filter(info -> info.name.toLowerCase().contains(lower) || info.address.toLowerCase().contains(lower)).collect(Collectors.toList());
+		if (scrollOffset > playerSearch.size() - 3) {
+			scrollOffset = playerSearch.size() - 3;
+		}
+		if (scrollOffset < 0) {
+			scrollOffset = 0;
+		}
 	}
 
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -99,13 +118,26 @@ public class PostBoxScreen extends HandledScreen<PostBoxScreenHandler> {
 				vOff = 46;
 			}
 			this.drawTexture(matrices, x + 58, y + 27 + i * 23, 0, 183 + vOff, 110, 23);
-			DrawableHelper.drawStringWithShadow(matrices, textRenderer, playerSearch.get(scrollOffset + i).name, x + 74, y + 29 + i * 23, -1);
-			DrawableHelper.drawStringWithShadow(matrices, textRenderer, "1123 Bun Street", x + 74, y + 39 + i * 23, 0xBBBBBB);
+			PlayerMailInfo info = playerSearch.get(i + scrollOffset);
+			int mailBoxStatus = 16;
+			if (info.isFull()) {
+				mailBoxStatus = 0;
+			} else if (!info.placed) {
+				mailBoxStatus = 8;
+			}
+			this.drawTexture(matrices, x + 61, y + 40 + i * 23, 176 + mailBoxStatus, 15, 8, 8);
+			if (SKIN_CACHE.containsKey(info.uuid)) {
+				this.client.getTextureManager().bindTexture(SKIN_CACHE.get(info.uuid));
+				DrawableHelper.drawTexture(matrices, x + 61, y + 29 + i * 23, 8, 8, 8, 8, 64, 64);
+				DrawableHelper.drawTexture(matrices, x + 61, y + 29 + i * 23, 40, 8, 8, 8, 64, 64);
+			}
+			DrawableHelper.drawStringWithShadow(matrices, textRenderer, playerSearch.get(scrollOffset + i).name, x + 72, y + 29 + i * 23, -1);
+			DrawableHelper.drawStringWithShadow(matrices, textRenderer, info.address, x + 72, y + 39 + i * 23, 0xBBBBBB);
 			this.client.getTextureManager().bindTexture(TEXTURE);
 		}
 		int scroll = 0;
 		if (playerSearch.size() > 3) {
-			scroll = 54 * scrollOffset / playerSearch.size() - 3;
+			scroll = 54 * scrollOffset / (playerSearch.size() - 3);
 		}
 		this.drawTexture(matrices, x + 44, y + 27 + scroll, 176 + (playerSearch.size() > 3 ? 0 : 12), 0, 12, 15);
 	}
@@ -132,14 +164,14 @@ public class PostBoxScreen extends HandledScreen<PostBoxScreenHandler> {
 				MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1.0F));
 			}
 		}
-		if (searchWidget.isMouseOver(mouseX, mouseY)) {
-			focusOn(searchWidget);
-		}
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
 	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+		if (scrollOffset - amount >= 0 && scrollOffset - amount <= playerSearch.size() - 3) {
+			scrollOffset -= amount;
+		}
 		return super.mouseScrolled(mouseX, mouseY, amount);
 	}
 }

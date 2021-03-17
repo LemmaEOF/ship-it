@@ -39,6 +39,9 @@ public class ShipItVillagerProfessions {
 			4, new TradeOffers.Factory[] {
 				new SellFactory(1, Items.BOOK, 1, 12, 30),// Replace with fancy colored envelopes or letters when we have them
 				new SellFactory(1, Items.BOOK, 1, 12, 30) // Replace with fancy colored envelopes or letters when we have them
+			},
+			5, new TradeOffers.Factory[] {
+				new SellFactory(3, ShipItItems.ADDRESS_PLACARD, 1, 8, 150)
 			}
 		)));
 	}

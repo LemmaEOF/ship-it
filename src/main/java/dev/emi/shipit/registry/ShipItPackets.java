@@ -3,6 +3,8 @@ package dev.emi.shipit.registry;
 import java.util.UUID;
 
 import dev.emi.shipit.screen.handler.PostBoxScreenHandler;
+import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import dev.onyxstudios.cca.api.v3.level.LevelComponents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.util.Identifier;
 
@@ -16,6 +18,7 @@ public class ShipItPackets {
 			server.execute(() -> {
 				if (player.currentScreenHandler.syncId == syncId && player.currentScreenHandler instanceof PostBoxScreenHandler) {
 					((PostBoxScreenHandler) player.currentScreenHandler).sendMail(server, uuid);
+					LevelComponents.sync(ShipItComponents.MAIL, server, (AutoSyncedComponent) ShipItComponents.MAIL.get(server.getOverworld().getLevelProperties()), p -> p == player);
 				}
 			});
 		});
