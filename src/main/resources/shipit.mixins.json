@@ -3,7 +3,10 @@
   "package": "dev.emi.shipit.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "PlayerManagerMixin"
+    "StructurePoolAccessor",
+
+    "PlayerManagerMixin",
+    "StructurePoolsMixin"
   ],
   "client": [
   ],
