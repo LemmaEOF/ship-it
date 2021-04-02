@@ -16,28 +16,18 @@ import net.minecraft.util.Identifier;
 
 @Mixin(StructurePools.class)
 public class StructurePoolsMixin {
-	@Unique
-	private static final Identifier PLAINS = new Identifier("village/plains/houses");
-	@Unique
-	private static final Identifier DESERT = new Identifier("village/desert/houses");
-	@Unique
-	private static final Identifier SNOWY = new Identifier("village/snowy/houses");
-	@Unique
-	private static final Identifier TAIGA = new Identifier("village/taiga/houses");
-	@Unique
-	private static final Identifier SAVANNA = new Identifier("village/savanna/houses");
 	
 	@Inject(at = @At("HEAD"), method = "register")
 	private static void register(StructurePool pool, CallbackInfoReturnable<StructurePool> info) {
-		if (pool.getId().equals(PLAINS)) {
+		if (pool.getId().equals(new Identifier("village/plains/houses"))) {
 			addToPool(pool, "shipit:village/plains/houses/plains_post_office_1", 4);
-		} else if (pool.getId().equals(DESERT)) {
+		} else if (pool.getId().equals(new Identifier("village/desert/houses"))) {
 			addToPool(pool, "shipit:village/desert/houses/desert_post_office_1", 4);
-		} else if (pool.getId().equals(SNOWY)) {
+		} else if (pool.getId().equals(new Identifier("village/snowy/houses"))) {
 			addToPool(pool, "shipit:village/snowy/houses/snowy_post_office_1", 4);
-		} else if (pool.getId().equals(TAIGA)) {
+		} else if (pool.getId().equals(new Identifier("village/taiga/houses"))) {
 			addToPool(pool, "shipit:village/taiga/houses/taiga_post_office_1", 4);
-		} else if (pool.getId().equals(SAVANNA)) {
+		} else if (pool.getId().equals(new Identifier("village/savanna/houses"))) {
 			addToPool(pool, "shipit:village/savanna/houses/savanna_post_office_1", 4);
 		}
 	}
