@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.structure.pool.StructurePool;
@@ -20,7 +21,7 @@ import net.minecraft.util.Identifier;
 public class StructurePoolsMixin {
 	
 	@Inject(at = @At("HEAD"), method = "register")
-	private static void register(Registerable<StructurePool> poolRegisterable, String id, StructurePool pool, CallbackInfoReturnable<StructurePool> info) {
+	private static void register(Registerable<StructurePool> structurePoolsRegisterable, String id, StructurePool pool, CallbackInfo ci) {
 		if (pool.getId().equals(new Identifier("village/plains/houses"))) {
 			addToPool(pool, "shipit:village/plains/houses/plains_post_office_1", 4);
 		} else if (pool.getId().equals(new Identifier("village/desert/houses"))) {

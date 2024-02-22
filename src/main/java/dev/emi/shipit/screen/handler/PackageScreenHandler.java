@@ -49,9 +49,34 @@ public class PackageScreenHandler extends ScreenHandler {
 		return pack.canPlayerUse(player);
 	}
 
-	//TODO: help
 	@Override
-	public ItemStack quickMove(PlayerEntity player, int slot) {
-		return null;
+	public ItemStack quickMove(PlayerEntity player, int slotId) {
+		ItemStack stack = ItemStack.EMPTY;
+		Slot slot = this.slots.get(slotId);
+		if (slot != null && slot.hasStack()) {
+			ItemStack slotStack = slot.getStack();
+			stack = slotStack.copy();
+			if (slotId < 9) {
+				if (!this.insertItem(slotStack, 9, 45, true)) {
+					return ItemStack.EMPTY;
+				}
+			} else if (!this.insertItem(slotStack, 0, 9, false)) {
+				return ItemStack.EMPTY;
+			}
+
+			if (slotStack.isEmpty()) {
+				slot.setStack(ItemStack.EMPTY);
+			} else {
+				slot.markDirty();
+			}
+
+			if (slotStack.getCount() == stack.getCount()) {
+				return ItemStack.EMPTY;
+			}
+
+			slot.onTakeItem(player, slotStack);
+		}
+
+		return stack;
 	}
 }

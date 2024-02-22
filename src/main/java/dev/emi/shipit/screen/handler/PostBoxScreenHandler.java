@@ -47,9 +47,35 @@ public class PostBoxScreenHandler extends ScreenHandler {
 		return true;
 	}
 
-	//TODO: help
+	//TODO: ensure this is correct - should only mail be allowed in the slot?
 	@Override
-	public ItemStack quickMove(PlayerEntity player, int slot) {
-		return null;
+	public ItemStack quickMove(PlayerEntity player, int slotId) {
+		ItemStack stack = ItemStack.EMPTY;
+		Slot slot = this.slots.get(slotId);
+		if (slot != null && slot.hasStack()) {
+			ItemStack slotStack = slot.getStack();
+			stack = slotStack.copy();
+			if (slotId == 0) {
+				if (!this.insertItem(slotStack, 1, 37, true)) {
+					return ItemStack.EMPTY;
+				}
+			} else if (!this.insertItem(slotStack, 0, 1, false)) {
+				return ItemStack.EMPTY;
+			}
+
+			if (slotStack.isEmpty()) {
+				slot.setStack(ItemStack.EMPTY);
+			} else {
+				slot.markDirty();
+			}
+
+			if (slotStack.getCount() == stack.getCount()) {
+				return ItemStack.EMPTY;
+			}
+
+			slot.onTakeItem(player, slotStack);
+		}
+
+		return stack;
 	}
 }

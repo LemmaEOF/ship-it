@@ -27,9 +27,7 @@ public class PostBoxBlock extends Block {
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		if (!world.isClient) {
 			LevelComponents.sync(ShipItComponents.MAIL, ((ServerWorld) world).getServer(), (AutoSyncedComponent) ShipItComponents.MAIL.get(world.getLevelProperties()), p -> p == player);
-			player.openHandledScreen(new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) -> {
-				return new PostBoxScreenHandler(i, playerInventory);
-			}, TITLE));
+			player.openHandledScreen(new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) -> new PostBoxScreenHandler(i, playerInventory), TITLE));
 		}
 		return ActionResult.SUCCESS;
 	}
