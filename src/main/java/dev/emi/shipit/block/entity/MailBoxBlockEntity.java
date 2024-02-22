@@ -2,6 +2,7 @@ package dev.emi.shipit.block.entity;
 
 import java.util.UUID;
 
+import dev.emi.shipit.registry.ShipItBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
@@ -9,16 +10,17 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 
 // Unused
 public class MailBoxBlockEntity extends BlockEntity implements Inventory {
 	private DefaultedList<ItemStack> stacks = DefaultedList.ofSize(9, ItemStack.EMPTY);
 	private UUID owner;
 	
-	public MailBoxBlockEntity() {
-		super(null);
+	public MailBoxBlockEntity(BlockPos pos, BlockState state) {
+		super(ShipItBlockEntities.MAIL_BOX, pos, state);
 		//super(ShipItBlockEntities.MAIL_BOX);
 	}
 
@@ -30,18 +32,17 @@ public class MailBoxBlockEntity extends BlockEntity implements Inventory {
 	}
 
 	@Override
-	public void fromTag(BlockState state, CompoundTag tag) {
-		super.fromTag(state, tag);
+	public void readNbt(NbtCompound tag) {
+		super.readNbt(tag);
 		if (tag.contains("Items", 9)) {
-			Inventories.fromTag(tag, stacks);
+			Inventories.readNbt(tag, stacks);
 		}
 	}
 
 	@Override
-	public CompoundTag toTag(CompoundTag tag) {
-		super.toTag(tag);
-		Inventories.toTag(tag, stacks, false);
-		return tag;
+	public void writeNbt(NbtCompound tag) {
+		super.writeNbt(tag);
+		Inventories.writeNbt(tag, stacks, false);
 	}
 
 	@Override

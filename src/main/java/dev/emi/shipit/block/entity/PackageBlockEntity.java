@@ -7,33 +7,34 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 
 public class PackageBlockEntity extends BlockEntity implements Inventory {
 	private DefaultedList<ItemStack> stacks = DefaultedList.ofSize(27, ItemStack.EMPTY);
 
-	public PackageBlockEntity() {
-		super(ShipItBlockEntities.PACKAGE);
+	public PackageBlockEntity(BlockPos pos, BlockState state) {
+		super(ShipItBlockEntities.PACKAGE, pos, state);
 	}
 
 	@Override
-	public void fromTag(BlockState state, CompoundTag tag) {
-		super.fromTag(state, tag);
+	public void readNbt(NbtCompound tag) {
+		super.readNbt(tag);
 		if (tag.contains("Items", 9)) {
-			Inventories.fromTag(tag, stacks);
+			Inventories.readNbt(tag, stacks);
 		}
 	}
 
 	@Override
-	public CompoundTag toTag(CompoundTag tag) {
-		super.toTag(tag);
+	public void writeNbt(NbtCompound tag) {
+		super.writeNbt(tag);
 		getInventoryTag(tag);
-		return tag;
 	}
 	
-	public CompoundTag getInventoryTag(CompoundTag tag) {
-		return Inventories.toTag(tag, stacks, false);
+	public NbtCompound getInventoryTag(NbtCompound tag) {
+		return Inventories.writeNbt(tag, stacks, false);
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class MailBoxBlock extends Block {
-	private static final TranslatableText TITLE = new TranslatableText("container.shipit.mail_box");
+	private static final Text TITLE = Text.translatable("container.shipit.mail_box");
 
 	public MailBoxBlock(Settings settings) {
 		super(settings);
@@ -39,7 +39,7 @@ public class MailBoxBlock extends Block {
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		ItemStack stack = player.getStackInHand(hand);
 		if (stack.getItem() == ShipItItems.ADDRESS_PLACARD && stack.hasCustomName()) {
-			ShipItComponents.MAIL.get(world.getLevelProperties()).getMailInfo(player).address = stack.getName().asString();
+			ShipItComponents.MAIL.get(world.getLevelProperties()).getMailInfo(player).address = stack.getName().getString();
 			if (!player.isCreative()) {
 				stack.decrement(1);
 			}

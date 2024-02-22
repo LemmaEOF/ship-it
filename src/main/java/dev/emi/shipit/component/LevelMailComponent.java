@@ -7,9 +7,9 @@ import java.util.UUID;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.WorldProperties;
 
@@ -20,19 +20,19 @@ public class LevelMailComponent implements MailComponent, AutoSyncedComponent {
 	}
 
 	@Override
-	public void readFromNbt(CompoundTag tag) {
+	public void readFromNbt(NbtCompound tag) {
 		MAIL_INFOS.clear();
-		ListTag infos = tag.getList("Infos", 10);
-		for (Tag i : infos) {
+		NbtList infos = tag.getList("Infos", 10);
+		for (NbtElement i : infos) {
 			PlayerMailInfo info = new PlayerMailInfo();
-			info.fromTag((CompoundTag) i);
+			info.fromTag((NbtCompound) i);
 			MAIL_INFOS.put(info.uuid, info);
 		}
 	}
 
 	@Override
-	public void writeToNbt(CompoundTag tag) {
-		ListTag infos = new ListTag();
+	public void writeToNbt(NbtCompound tag) {
+		NbtList infos = new NbtList();
 		for (Map.Entry<UUID, PlayerMailInfo> entry : MAIL_INFOS.entrySet()) {
 			infos.add(entry.getValue().toTag());
 		}

@@ -2,6 +2,7 @@ package dev.emi.shipit.mixin;
 
 import com.mojang.datafixers.util.Pair;
 
+import net.minecraft.registry.Registerable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,11 +15,12 @@ import net.minecraft.structure.pool.StructurePools;
 import net.minecraft.structure.processor.StructureProcessorLists;
 import net.minecraft.util.Identifier;
 
+//TODO: help
 @Mixin(StructurePools.class)
 public class StructurePoolsMixin {
 	
 	@Inject(at = @At("HEAD"), method = "register")
-	private static void register(StructurePool pool, CallbackInfoReturnable<StructurePool> info) {
+	private static void register(Registerable<StructurePool> poolRegisterable, String id, StructurePool pool, CallbackInfoReturnable<StructurePool> info) {
 		if (pool.getId().equals(new Identifier("village/plains/houses"))) {
 			addToPool(pool, "shipit:village/plains/houses/plains_post_office_1", 4);
 		} else if (pool.getId().equals(new Identifier("village/desert/houses"))) {
@@ -34,7 +36,7 @@ public class StructurePoolsMixin {
 
 	@Unique
 	private static void addToPool(StructurePool pool, String name, int weight) {
-		StructurePoolElement element = StructurePoolElement.method_30426(name, StructureProcessorLists.EMPTY)
+		StructurePoolElement element = StructurePoolElement.ofProcessedSingle(name, StructureProcessorLists.EMPTY)
 			.apply(StructurePool.Projection.RIGID);
 		for (int i = 0; i < weight; i++) {
 			((StructurePoolAccessor) pool).getElements().add(element);

@@ -7,7 +7,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.collection.DefaultedList;
 
 public class PlayerMailInfo implements Inventory {
@@ -32,12 +33,12 @@ public class PlayerMailInfo implements Inventory {
 
 	public PlayerMailInfo(PlayerEntity player) {
 		this.uuid = player.getUuid();
-		this.name = player.getName().asString();
+		this.name = player.getName().getString();
 		generateRandomAddress();
 	}
 
 	public void tryNameUpdate(PlayerEntity player) {
-		name = player.getName().asString();
+		name = player.getName().getString();
 	}
 
 	private void generateRandomAddress() {
@@ -46,9 +47,9 @@ public class PlayerMailInfo implements Inventory {
 			+ STREET_SUFFIXES[random.nextInt(STREET_SUFFIXES.length)];
 	}
 
-	public CompoundTag toTag() {
-		CompoundTag tag = new CompoundTag();
-		Inventories.toTag(tag, stacks, false);
+	public NbtCompound toTag() {
+		NbtCompound tag = new NbtCompound();
+		Inventories.writeNbt(tag, stacks, false);
 		tag.putString("Name", name);
 		tag.putString("Address", address);
 		tag.putUuid("Uuid", uuid);
@@ -65,9 +66,9 @@ public class PlayerMailInfo implements Inventory {
 		return tag;
 	}
 
-	public void fromTag(CompoundTag tag) {
+	public void fromTag(NbtCompound tag) {
 		if (tag.contains("Items", 9)) {
-			Inventories.fromTag(tag, stacks);
+			Inventories.readNbt(tag, stacks);
 		}
 		name = tag.getString("Name");
 		address = tag.getString("Address");

@@ -1,8 +1,9 @@
 package dev.emi.shipit.registry;
 
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class ShipItItems {
 	public static final Item BUNDLE_OF_CARDBOARD = register("bundle_of_cardboard", new Item(new Item.Settings().maxCount(16)));
@@ -13,6 +14,6 @@ public class ShipItItems {
 	}
 
 	private static Item register(String name, Item item) {
-		return Registry.register(Registry.ITEM, new Identifier("shipit", name), item);
+		return Registry.register(Registries.ITEM, new Identifier("shipit", name), item);
 	}
 }

@@ -8,8 +8,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class ShipItBlocks {
 	public static final Block POST_BOX = register("post_box", new PostBoxBlock(FabricBlockSettings.copyOf(Blocks.LOOM)));
@@ -24,8 +25,8 @@ public class ShipItBlocks {
 	}
 
 	private static Block register(String name, Block block, Item.Settings settings) {
-		block = Registry.register(Registry.BLOCK, new Identifier("shipit", name), block);
-		Registry.register(Registry.ITEM, new Identifier("shipit", name), new BlockItem(block, settings));
+		block = Registry.register(Registries.BLOCK, new Identifier("shipit", name), block);
+		Registry.register(Registries.ITEM, new Identifier("shipit", name), new BlockItem(block, settings));
 		return block;
 	}
 }
