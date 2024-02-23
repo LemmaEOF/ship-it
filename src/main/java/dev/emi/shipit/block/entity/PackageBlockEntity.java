@@ -53,7 +53,7 @@ public class PackageBlockEntity extends BlockEntity implements Inventory, SidedI
 
 	@Override
 	public int size() {
-		return getCurrentSlotCount();
+		return 9 + (6 * getCachedState().get(PackageBlock.STAMPS));
 	}
 
 	@Override
@@ -93,20 +93,17 @@ public class PackageBlockEntity extends BlockEntity implements Inventory, SidedI
 
 	@Override
 	public int[] getAvailableSlots(Direction side) {
-		return IntStream.range(0, getCurrentSlotCount()).toArray();
+		return IntStream.range(0, side()).toArray();
 	}
 
 	@Override
 	public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
-		return slot < getCurrentSlotCount();
+		return slot < size();
 	}
 
 	@Override
 	public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-		return slot < getCurrentSlotCount();
+		return slot < size();
 	}
 
-	private int getCurrentSlotCount() {
-		return 9+getCachedState().get(PackageBlock.STAMPS);
-	}
 }
