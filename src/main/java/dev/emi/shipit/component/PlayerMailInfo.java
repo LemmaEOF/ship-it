@@ -26,9 +26,6 @@ public class PlayerMailInfo implements Inventory {
 	// If the player has ever placed a mailbox
 	public boolean placed;
 
-	//public RegistryKey<World> mailBoxDimension;
-	//public BlockPos mailBoxPos;
-
 	public PlayerMailInfo() {
 	}
 
@@ -55,15 +52,6 @@ public class PlayerMailInfo implements Inventory {
 		tag.putString("Address", address);
 		tag.putUuid("Uuid", uuid);
 		tag.putBoolean("Placed", placed);
-		/*
-		if (mailBoxDimension != null) {
-			tag.putString("Dimension", mailBoxDimension.getValue().toString());
-		}
-		if (mailBoxPos != null) {
-			tag.putInt("x", mailBoxPos.getX());
-			tag.putInt("y", mailBoxPos.getY());
-			tag.putInt("z", mailBoxPos.getZ());
-		}*/
 		return tag;
 	}
 
@@ -75,14 +63,6 @@ public class PlayerMailInfo implements Inventory {
 		address = tag.getString("Address");
 		uuid = tag.getUuid("Uuid");
 		placed = tag.getBoolean("Placed");
-		/*
-		if (tag.contains("Dimension")) {
-            DataResult<RegistryKey<World>> result = World.CODEC.parse(NbtOps.INSTANCE, tag.get("Dimension"));
-            mailBoxDimension = result.result().orElse(null);
-		}
-		if (mailBoxDimension != null && tag.contains("x")) {
-			mailBoxPos = new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
-		}*/
 	}
 
 	public boolean isFull() {

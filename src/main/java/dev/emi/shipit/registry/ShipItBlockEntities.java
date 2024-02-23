@@ -1,6 +1,5 @@
 package dev.emi.shipit.registry;
 
-import dev.emi.shipit.block.entity.MailBoxBlockEntity;
 import dev.emi.shipit.block.entity.PackageBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
@@ -10,7 +9,6 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class ShipItBlockEntities {
-	public static final BlockEntityType<MailBoxBlockEntity> MAIL_BOX = register("mail_box", MailBoxBlockEntity::new, ShipItBlocks.MAIL_BOX);
 	public static final BlockEntityType<PackageBlockEntity> PACKAGE = register("package", PackageBlockEntity::new, ShipItBlocks.PACKAGE);
 
 	private static <T extends BlockEntity> BlockEntityType<T> register(String name, BlockEntityType.BlockEntityFactory<T> supplier, Block... blocks) {

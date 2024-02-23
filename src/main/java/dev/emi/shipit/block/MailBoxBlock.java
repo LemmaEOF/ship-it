@@ -1,13 +1,10 @@
 package dev.emi.shipit.block;
 
-import dev.emi.shipit.block.entity.MailBoxBlockEntity;
 import dev.emi.shipit.registry.ShipItComponents;
 import dev.emi.shipit.registry.ShipItItems;
 import dev.emi.shipit.screen.handler.MailBoxScreenHandler;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -18,9 +15,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
-public class MailBoxBlock extends Block implements BlockEntityProvider {
+public class MailBoxBlock extends Block {
 	private static final Text TITLE = Text.translatable("container.shipit.mail_box");
 
 	public MailBoxBlock(Settings settings) {
@@ -32,10 +28,6 @@ public class MailBoxBlock extends Block implements BlockEntityProvider {
 		super.onPlaced(world, pos, state, placer, stack);
 		if (placer instanceof PlayerEntity) {
 			ShipItComponents.MAIL.get(world.getLevelProperties()).getMailInfo((PlayerEntity) placer).placed = true;
-		}
-		BlockEntity be = world.getBlockEntity(pos);
-		if (be instanceof MailBoxBlockEntity) {
-			((MailBoxBlockEntity) be).setOwner(placer);
 		}
 	}
 	
@@ -55,12 +47,6 @@ public class MailBoxBlock extends Block implements BlockEntityProvider {
 			}
 		}
 		return ActionResult.SUCCESS;
-	}
-
-	@Nullable
-	@Override
-	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-		return new MailBoxBlockEntity(pos, state);
 	}
 
 }

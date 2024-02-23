@@ -54,7 +54,7 @@ public class LevelMailComponent implements MailComponent, AutoSyncedComponent {
 	}
 
 	@Override
-	public boolean sendMail(/*MinecraftServer server, */UUID uuid, ItemStack stack) {
+	public boolean sendMail(UUID uuid, ItemStack stack) {
 		PlayerMailInfo info = MAIL_INFOS.get(uuid);
 		for (int i = 0; i < info.size(); i++) {
 			if (info.getStack(i).isEmpty()) {
@@ -62,34 +62,8 @@ public class LevelMailComponent implements MailComponent, AutoSyncedComponent {
 				return true;
 			}
 		}
-		/*
-		if (info.mailBoxDimension != null && info.mailBoxPos != null) {
-			World mailWorld = server.getWorld(info.mailBoxDimension);
-			if (mailWorld.isChunkLoaded(info.mailBoxPos)) {
-				BlockState state = mailWorld.getBlockState(info.mailBoxPos);
-				if (state.getBlock() instanceof MailBoxBlock) {
-					BlockEntity be = mailWorld.getBlockEntity(info.mailBoxPos);
-					if (be instanceof MailBoxBlockEntity) {
-						Inventory box = (Inventory) be;
-						for (int i = 0; i < box.size(); i++) {
-							if (box.getStack(i).isEmpty()) {
-								box.setStack(i, stack);
-								return true;
-							}
-						}
-					}
-				}
-			}
-		}*/
 		return false;
 	}
-	/*
-	@Override
-	public void setMailBox(PlayerEntity player, World world, BlockPos pos) {
-		PlayerMailInfo info = getMailInfo(player);
-		info.mailBoxPos = pos;
-		info.mailBoxDimension = world.getRegistryKey();
-	}*/
 
 	@Override
 	public boolean shouldSyncWith(ServerPlayerEntity player) {

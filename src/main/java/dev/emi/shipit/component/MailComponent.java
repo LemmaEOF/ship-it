@@ -13,7 +13,6 @@ public interface MailComponent extends ComponentV3 {
 	
 	Map<UUID, PlayerMailInfo> getAllMailInfos();
 
-	//void setMailBox(PlayerEntity player, World world, BlockPos pos);
 	
-	boolean sendMail(/*MinecraftServer server, */UUID uuid, ItemStack stack);
+	boolean sendMail(UUID uuid, ItemStack stack);
 }
