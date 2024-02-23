@@ -9,7 +9,7 @@ group = project.maven_group
 
 loom {
 	mods {
-		"ship-it" {
+		"shipit" {
 			sourceSet sourceSets.main
 		}
 	}

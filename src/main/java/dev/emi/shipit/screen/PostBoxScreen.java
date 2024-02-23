@@ -23,6 +23,7 @@ import net.minecraft.util.Identifier;
 import java.util.*;
 import java.util.stream.Collectors;
 
+//TODO: scroll bar isn't clickable
 public class PostBoxScreen extends HandledScreen<PostBoxScreenHandler> {
 	private static final Map<UUID, Identifier> SKIN_CACHE = new HashMap<>();
 	private static final Identifier TEXTURE = new Identifier("shipit", "textures/gui/container/post_box.png");
@@ -62,7 +63,7 @@ public class PostBoxScreen extends HandledScreen<PostBoxScreenHandler> {
 		this.searchWidget.setDrawsBackground(false);
 		this.searchWidget.setMaxLength(16);
 		this.searchWidget.setChangedListener(this::updateSearch);
-		this.addDrawableChild(searchWidget);
+		this.addSelectableChild(searchWidget);
 
 		this.addSelectableChild(new ButtonWidget.Builder(Text.literal("!"), (button) -> {
 			if (selected == null) {

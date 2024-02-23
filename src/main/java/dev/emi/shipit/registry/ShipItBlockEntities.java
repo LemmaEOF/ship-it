@@ -17,4 +17,6 @@ public class ShipItBlockEntities {
 		return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier("shipit", name),
 			BlockEntityType.Builder.create(supplier, blocks).build(null));
 	}
+
+	public static void init() {}
 }

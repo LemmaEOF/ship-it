@@ -1,0 +1,12 @@
+{
+  "block.shipit.mailbox": "Mail Box",
+  "block.shipit.package": "Package",
+  "block.shipit.postbox": "Post Box",
+  "container.shipit.mailbox": "Mail Box",
+  "container.shipit.package": "Package",
+  "container.shipit.postbox": "Post Box",
+  "item.shipit.address_placard": "Address Placard",
+  "item.shipit.bundle_of_cardboard": "Bundle of Cardboard",
+  "item.shipit.stamp": "Stamp",
+  "itemGroup.shipit.shipit": "Ship It!"
+}

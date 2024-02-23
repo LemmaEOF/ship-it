@@ -23,15 +23,6 @@ public class PackageScreenHandler extends ScreenHandler {
 		this.stamps = stamps;
 
 		for (int y = 0; y < 3; y++) {
-			for (int x = 0; x < 9; x++) {
-				this.addSlot(new Slot(inventory, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
-			}
-		}
-		for (int x = 0; x < 9; x++) {
-			this.addSlot(new Slot(inventory, x, 8 + x * 18, 142));
-		}
-
-		for (int y = 0; y < 3; y++) {
 			for (int x = stamps; x > 0; x--) {
 				this.addSlot(new Slot(pack, 3 + x * 6 + y * 2, 62 - x * 18, 17 + y * 18));
 			}
@@ -41,6 +32,15 @@ public class PackageScreenHandler extends ScreenHandler {
 			for (int x = 0; x < stamps; x++) {
 				this.addSlot(new Slot(pack, 10 + x * 6 + y * 2, 116 + x * 18, 17 + y * 18));
 			}
+		}
+
+		for (int y = 0; y < 3; y++) {
+			for (int x = 0; x < 9; x++) {
+				this.addSlot(new Slot(inventory, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
+			}
+		}
+		for (int x = 0; x < 9; x++) {
+			this.addSlot(new Slot(inventory, x, 8 + x * 18, 142));
 		}
 	}
 
@@ -56,11 +56,11 @@ public class PackageScreenHandler extends ScreenHandler {
 		if (slot != null && slot.hasStack()) {
 			ItemStack slotStack = slot.getStack();
 			stack = slotStack.copy();
-			if (slotId < 9) {
-				if (!this.insertItem(slotStack, 9, 45, true)) {
+			if (slotId < getCurrentSlotCount()) {
+				if (!this.insertItem(slotStack, getCurrentSlotCount(), getCurrentSlotCount()+36, true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.insertItem(slotStack, 0, 9, false)) {
+			} else if (!this.insertItem(slotStack, 0, getCurrentSlotCount(), false)) {
 				return ItemStack.EMPTY;
 			}
 
@@ -78,5 +78,9 @@ public class PackageScreenHandler extends ScreenHandler {
 		}
 
 		return stack;
+	}
+
+	private int getCurrentSlotCount() {
+		return 9+(6*stamps);
 	}
 }
