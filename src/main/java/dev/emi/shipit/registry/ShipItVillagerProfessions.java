@@ -16,18 +16,20 @@ import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
 
+//TODO: custom villager work sound, edit structures to actually have postmaster villagers in them
 public class ShipItVillagerProfessions {
-	public static final VillagerProfession MAILROOM = new VillagerProfession(
-			"shipit:mailroom",
-			entry -> entry.matchesKey(ShipItPOIs.MAILROOM_KEY),
-			entry -> entry.matchesKey(ShipItPOIs.MAILROOM_KEY),
+	public static final VillagerProfession POSTMASTER = new VillagerProfession(
+			"shipit:postmaster",
+			entry -> entry.matchesKey(ShipItPOIs.POSTMASTER_KEY),
+			entry -> entry.matchesKey(ShipItPOIs.POSTMASTER_KEY),
 			ImmutableSet.of(),
 			ImmutableSet.of(),
 			SoundEvents.ENTITY_VILLAGER_WORK_LIBRARIAN);
 	
 	public static void init() {
-		Registry.register(Registries.VILLAGER_PROFESSION, new Identifier("shipit", "mailroom"), MAILROOM);
-		TradeOffers.PROFESSION_TO_LEVELED_TRADE.put(MAILROOM, new Int2ObjectOpenHashMap<>(ImmutableMap.of(
+		Registry.register(Registries.VILLAGER_PROFESSION, new Identifier("shipit", "postmaster"), POSTMASTER);
+		//TODO: data-driven stamps/stationery
+		TradeOffers.PROFESSION_TO_LEVELED_TRADE.put(POSTMASTER, new Int2ObjectOpenHashMap<>(ImmutableMap.of(
 				1, new TradeOffers.Factory[]{
 						new BuyFactory(Items.PAPER, 24, 1, 16, 2),
 						new SellFactory(1, Items.BOOK, 1, 12, 3) // Replace with envelopes or letters when we have them
