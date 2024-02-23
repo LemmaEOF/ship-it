@@ -1,18 +1,25 @@
 package dev.emi.shipit.block.entity;
 
+import dev.emi.shipit.block.PackageBlock;
 import dev.emi.shipit.registry.ShipItBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.predicate.NumberRange;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
-public class PackageBlockEntity extends BlockEntity implements Inventory {
+import java.util.stream.IntStream;
+
+public class PackageBlockEntity extends BlockEntity implements Inventory, SidedInventory {
 	private DefaultedList<ItemStack> stacks = DefaultedList.ofSize(27, ItemStack.EMPTY);
 
 	public PackageBlockEntity(BlockPos pos, BlockState state) {
@@ -46,7 +53,7 @@ public class PackageBlockEntity extends BlockEntity implements Inventory {
 
 	@Override
 	public int size() {
-		return stacks.size();
+		return getCurrentSlotCount();
 	}
 
 	@Override
@@ -82,5 +89,24 @@ public class PackageBlockEntity extends BlockEntity implements Inventory {
 	@Override
 	public boolean canPlayerUse(PlayerEntity player) {
 		return true;
+	}
+
+	@Override
+	public int[] getAvailableSlots(Direction side) {
+		return IntStream.range(0, getCurrentSlotCount()).toArray();
+	}
+
+	@Override
+	public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir) {
+		return slot < getCurrentSlotCount();
+	}
+
+	@Override
+	public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+		return slot < getCurrentSlotCount();
+	}
+
+	private int getCurrentSlotCount() {
+		return 9+getCachedState().get(PackageBlock.STAMPS);
 	}
 }

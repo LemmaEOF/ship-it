@@ -7,6 +7,8 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+//TODO: make it look more like a package? that'd be cool
+//TODO: render what stamps are on the box
 public class PackageScreen extends HandledScreen<PackageScreenHandler> {
 	private static final Identifier TEXTURE = new Identifier("textures/gui/container/dispenser.png");
 

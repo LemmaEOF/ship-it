@@ -12,6 +12,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.collection.DefaultedList;
 
 public class PlayerMailInfo implements Inventory {
+	//TODO: data-drive
 	private static final String[] STREET_NAMES = new String[] {
 		"Bun", "Deer", "Powder", "Gamma", "Pear"
 	};
