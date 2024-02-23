@@ -7,7 +7,9 @@
   "authors": [
     "Emi"
   ],
-  "contributors": [],
+  "contributors": [
+    "LemmaEOF"
+  ],
   "contact": {},
   "license": "MIT",
   "icon": "assets/shipit/icon.png",

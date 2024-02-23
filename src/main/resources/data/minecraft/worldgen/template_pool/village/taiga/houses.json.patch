@@ -1,0 +1,17 @@
+[
+  {
+	"op": "add",
+	"path": "/elements/0",
+	"value": {
+	  "element": {
+		"element_type": "minecraft:legacy_single_pool_element",
+		"location": "shipit:village/taiga/houses/taiga_post_office_1",
+		"processors": {
+		  "processors": []
+		},
+		"projection": "rigid"
+	  },
+	  "weight": 2
+	}
+  }
+]

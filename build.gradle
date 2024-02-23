@@ -20,6 +20,10 @@ repositories {
 		name = "Ladysnake Libs"
 		url = "https://maven.ladysnake.org/releases"
 	}
+	maven {
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
+	}
 }
 
 dependencies {
@@ -34,20 +38,19 @@ dependencies {
 	include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.2.2"
 	modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-level:5.2.2"
 	include "dev.onyxstudios.cardinal-components-api:cardinal-components-level:5.2.2"
+
+	modRuntimeOnly "maven.modrinth:patched:kYqdyb6B"
+	include "maven.modrinth:patched:kYqdyb6B"
 }
 
 processResources {
 	inputs.property "version", project.version
 
-	from(sourceSets.main.resources.srcDirs) {
-		include "fabric.mod.json"
+	filesMatching("fabric.mod.json") {
 		expand "version": project.version
 	}
-
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "fabric.mod.json"
-	}
 }
+
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 17

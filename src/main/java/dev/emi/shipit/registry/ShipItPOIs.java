@@ -16,7 +16,5 @@ public class ShipItPOIs {
 	public static final PointOfInterestType MAILROOM = PointOfInterestHelper.register(new Identifier("shipit", "mailroom"), 1, 1,
 		ImmutableSet.copyOf(ShipItBlocks.POST_BOX.getStateManager().getStates()));
 
-	public static void init() {
-		Registry.register(Registries.POINT_OF_INTEREST_TYPE, MAILROOM_KEY, MAILROOM);
-	}
+	public static void init() {}
 }
