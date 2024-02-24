@@ -93,7 +93,7 @@ public class PackageBlockEntity extends BlockEntity implements Inventory, SidedI
 
 	@Override
 	public int[] getAvailableSlots(Direction side) {
-		return IntStream.range(0, side()).toArray();
+		return IntStream.range(0, size()).toArray();
 	}
 
 	@Override
