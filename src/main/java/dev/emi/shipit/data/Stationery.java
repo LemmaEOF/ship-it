@@ -14,5 +14,4 @@ public record Stationery(Identifier itemTexture, Identifier guiTexture, Identifi
 					TextColor.CODEC.fieldOf("text_color").forGetter(Stationery::textColor)
 			).apply(instance, Stationery::new)
 	);
-
 }
