@@ -1,0 +1,6 @@
+{
+  "item_model": "shipit:blank_stationery",
+  "gui_texture": "shipit:textures/gui/stationery/blank.png",
+  "font": "minecraft:default",
+  "text_color": "black"
+}

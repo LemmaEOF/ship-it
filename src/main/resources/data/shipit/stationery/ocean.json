@@ -1,0 +1,6 @@
+{
+  "item_model": "shipit:ocean_stationery",
+  "gui_texture": "shipit:textures/gui/stationery/ocean.png",
+  "font": "shipit:unsanded",
+  "text_color": "#e4dfcb"
+}

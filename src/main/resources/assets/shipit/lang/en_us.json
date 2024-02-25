@@ -8,5 +8,9 @@
   "item.shipit.address_placard": "Address Placard",
   "item.shipit.bundle_of_cardboard": "Bundle of Cardboard",
   "item.shipit.stamp": "Stamp",
-  "itemGroup.shipit.shipit": "Ship It!"
+  "itemGroup.shipit.shipit": "Ship It!",
+  "shipit.letter.finalizeWarning": "Note! When you seal the letter, it will no longer be editable.",
+  "shipit.letter.from": "From %s",
+  "shipit.letter.sealButton": "Seal",
+  "shipit.letter.finalizeButton": "Seal and Close"
 }

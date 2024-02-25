@@ -10,6 +10,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.text.TextColor;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 
@@ -17,12 +18,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StationeryManager extends JsonDataLoader implements IdentifiableResourceReloadListener {
-	public static final StationeryManager INSTANCE = new StationeryManager();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+	public static final StationeryManager INSTANCE = new StationeryManager();
+	private static final Stationery BLANK = new Stationery(
+			new Identifier("shipit", "item/blank_stationery"),
+			new Identifier("shipit", "textures/gui/stationery/blank.png"),
+			new Identifier("minecraft", "default"),
+			TextColor.fromFormatting(Formatting.BLACK)
+	);
 	private final Map<Identifier, Stationery> stationery = new HashMap<>();
 
 	public StationeryManager() {
-		super(GSON, "shipit/stationery");
+		super(GSON, "stationery");
 	}
 
 	@Override
@@ -31,10 +38,16 @@ public class StationeryManager extends JsonDataLoader implements IdentifiableRes
 		for (Identifier id : prepared.keySet()) {
 			stationery.put(id, Stationery.CODEC.parse(JsonOps.INSTANCE, prepared.get(id)).getOrThrow(false, ShipItMain.LOGGER::info));
 		}
+		ShipItMain.LOGGER.info("Loaded {} stationery from JSON", stationery.size());
 	}
 
 	public Stationery getStationery(Identifier id) {
+		if (!stationery.containsKey(id)) return BLANK;
 		return stationery.get(id);
+	}
+
+	public Stationery getBlank() {
+		return BLANK;
 	}
 
 	public void writePacket(PacketByteBuf buf) {
@@ -42,7 +55,7 @@ public class StationeryManager extends JsonDataLoader implements IdentifiableRes
 		for (Identifier id : stationery.keySet()) {
 			Stationery stationery = this.stationery.get(id);
 			buf.writeIdentifier(id);
-			buf.writeIdentifier(stationery.itemTexture());
+			buf.writeIdentifier(stationery.itemModel());
 			buf.writeIdentifier(stationery.guiTexture());
 			buf.writeIdentifier(stationery.font());
 			buf.writeString(stationery.textColor().toString());
@@ -54,12 +67,13 @@ public class StationeryManager extends JsonDataLoader implements IdentifiableRes
 		int count = buf.readVarInt();
 		for (int i = 0; i < count; i++) {
 			stationery.put(buf.readIdentifier(), new Stationery(
-					buf.readIdentifier(), //itemTexture
+					buf.readIdentifier(), //itemModel
 					buf.readIdentifier(), //guiTexture
 					buf.readIdentifier(), //font
 					TextColor.parse(buf.readString())
 			));
 		}
+		ShipItMain.LOGGER.info("Loaded {} stationery from packet", stationery.size());
 	}
 
 	@Override
